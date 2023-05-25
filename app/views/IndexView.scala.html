@@ -14,13 +14,8 @@
  * limitations under the License.
  *@
 
-@import views.ViewUtils
-
 @this(
-layout: templates.Layout,
-formHelper: FormWithCSRF,
-govukButton: GovukButton,
-govukTable: GovukTable
+    layout: templates.Layout
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -29,5 +24,8 @@ govukTable: GovukTable
     pageTitle    = titleNoForm(messages("index.title")),
     showBackLink = false
 ) {
-    <h1>Hellow world</h1>
+
+    <h1 class="govuk-heading-xl">@messages("index.heading")</h1>
+    <h1 class="govuk-heading-xl">Hi.</h1>
+    <p class="govuk-body">@messages("index.guidance")</p>
 }
