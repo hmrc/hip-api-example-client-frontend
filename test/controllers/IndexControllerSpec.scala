@@ -17,17 +17,21 @@
 package controllers
 
 import base.SpecBase
+import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, stubFor, urlEqualTo}
+import play.api.Configuration
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.test.WireMockSupport
 import views.html.IndexView
 
-class IndexControllerSpec extends SpecBase {
+class IndexControllerSpec extends SpecBase with WireMockSupport {
 
   "Index Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder.build()
+      val application = buildApplication()
 
       running(application) {
         val request = FakeRequest(GET, routes.IndexController.onPageLoad.url)
@@ -39,5 +43,57 @@ class IndexControllerSpec extends SpecBase {
         contentAsString(result) mustEqual view()(request, messages(application)).toString()
       }
     }
+
+    "must call back end and redirect with response body" in {
+      val application = buildApplication()
+
+      val exampleResponse = "[{\"id\":1,\"name\":\"Exploding Kittens\",\"category\":{\"id\":545,\"name\":\"Card Games\"},\"photoUrls\":[\"string\"],\"tags\":[{\"id\":1,\"name\":\"Most Popular\"}],\"status\":\"available\"}]"
+      stubFor(
+        WireMock.get(urlEqualTo("/hip-api-example-client/make-example-request"))
+          .willReturn(
+            aResponse()
+              .withBody(exampleResponse)
+          )
+      )
+
+      running(application) {
+        val request = FakeRequest(GET, routes.IndexController.onSubmit.url)
+        val result = route(application, request).value
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.ResponseController.onPageLoad(exampleResponse).url
+      }
+    }
   }
+
+
+  "must call back end and redirect with error status code" in {
+
+    val application = buildApplication()
+
+    stubFor(
+      WireMock.get(urlEqualTo("/hip-api-example-client/make-example-request"))
+        .willReturn(
+          aResponse()
+            .withStatus(INTERNAL_SERVER_ERROR)
+        )
+    )
+
+    running(application) {
+      val request = FakeRequest(GET, routes.IndexController.onSubmit.url)
+      val result = route(application, request).value
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual routes.ResponseController.onPageLoad("Response status was 500").url
+    }
+  }
+
+  private def buildApplication() = {
+    val servicesConfig = Configuration.from(Map(
+      "microservice.services.hip-api-example-client.host" -> this.wireMockHost,
+      "microservice.services.hip-api-example-client.port" -> this.wireMockPort
+    ))
+    applicationBuilder.configure(servicesConfig).build()
+  }
+
+
 }
+

@@ -17,16 +17,15 @@
 package controllers
 
 
-import play.api.http.HttpEntity
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, Request, StringContextOps}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HttpResponse, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.IndexView
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.HttpReads.is2xx
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,8 +43,10 @@ class IndexController @Inject()(
 
   def onSubmit(): Action[AnyContent] = Action.async {
       implicit request => {
+        val value = url"${servicesConfig.baseUrl("hip-api-example-client")}/hip-api-example-client/make-example-request"
+        Console.println(s"Value: ${value.toString}")
         httpClient
-          .get(url"${servicesConfig.baseUrl("hip-api-example-client")}/hip-api-example-client/make-example-rnnnnequest")
+          .get(value)
           .execute[HttpResponse]
           .map(response => {
             if (is2xx(response.status)) {
