@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/hip-api-example-client/make-example-request"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "id": 1,
+        "name": "Exploding Kittens",
+        "category": {
+          "id": 545,
+          "name": "Card Games"
+        },
+        "photoUrls": [
+          "string"
+        ],
+        "tags": [
+          {
+            "id": 1,
+            "name": "Most Popular"
+          }
+        ],
+        "status": "available"
+      }
+    ]
+  }
+}
