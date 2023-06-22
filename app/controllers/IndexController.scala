@@ -43,10 +43,8 @@ class IndexController @Inject()(
 
   def onSubmit(): Action[AnyContent] = Action.async {
       implicit request => {
-        val value = url"${servicesConfig.baseUrl("hip-api-example-client")}/hip-api-example-client/make-example-request"
-        Console.println(s"Value: ${value.toString}")
         httpClient
-          .get(value)
+          .get(url"${servicesConfig.baseUrl("hip-api-example-client")}/hip-api-example-client/make-example-request")
           .execute[HttpResponse]
           .map(response => {
             if (is2xx(response.status)) {
