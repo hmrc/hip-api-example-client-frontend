@@ -3,5 +3,9 @@
 ->          /hmrc-frontend                               hmrcfrontend.Routes
 
 GET         /                                            controllers.IndexController.onPageLoad
+GET         /callapi                                     controllers.IndexController.onSubmit
+
 
 GET         /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
+
+GET         /apiresponse                                 controllers.ResponseController.onPageLoad(response: String)

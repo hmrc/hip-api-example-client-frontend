@@ -28,8 +28,10 @@ only be deployed in QA and production.
 
 To run the application use `sbt run` to start the service.
 
-Note that this service cannot actually function locally as the backend is only 
-deployed in QA and production.
+Note that the backend for this service is only deployed in QA and production. However, there is a Wiremock stub for the backend provided by the script  
+```
+run-wiremock-docker.sh
+```
 
 ### Authentication
 This service does not authenticate incoming requests.

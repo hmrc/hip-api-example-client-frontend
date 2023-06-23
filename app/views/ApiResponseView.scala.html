@@ -14,25 +14,33 @@
  * limitations under the License.
  *@
 
+@import play.api.http.HttpEntity
+@import akka.stream.Materializer
+@import scala.util.{Failure, Success}
+
 @this(
-    layout: templates.Layout,
-    govukButton: GovukButton
+layout: templates.Layout,
+govukTextarea: GovukTextarea
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(apiResponse: String)(implicit request: Request[_], messages: Messages)
 
 
 @layout(
-    pageTitle    = titleNoForm(messages("index.title")),
+    pageTitle    = titleNoForm(messages("apiresponse.title")),
     showBackLink = false
 ) {
 
-    <h1 class="govuk-heading-xl">@messages("index.heading")</h1>
-    <p class="govuk-body">@routes.IndexController.onSubmit.url</p>
-    @govukButton(Button(
-        content = Text("Call HIP API"),
-        href = Some(routes.IndexController.onSubmit.url)
-    ))
+    <h1 class="govuk-heading-xl">@messages("apiresponse.heading")</h1>
 
-    <p class="govuk-body">@messages("index.guidance")</p>
+    @govukTextarea(Textarea(
+      id = "more-detail",
+      name = "more-detail",
+      label = Label(
+       isPageHeading = true,
+       classes = "govuk-label--l",
+       content = Text("API Response:")
+      ),
+     value = Some(s"response: $apiResponse")
+  ))
 }
