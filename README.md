@@ -22,6 +22,12 @@ https://catalogue.tax.service.gov.uk/service/hip-api-example-client-frontend
 This is an example backend that interacts with a HIP API. Note that this can
 only be deployed in QA and production.
 
+We have configured authentication between the frontend and backend following internal-auth's
+service-to-service model. See here: https://github.com/hmrc/internal-auth.
+
+This service must be configured with a suitable authentication token in the `internal-auth.token`
+setting in `application/conf`.
+
 ## Using the service
 
 ### Running the application

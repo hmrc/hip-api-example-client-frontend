@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, stubFor, urlEqualTo}
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, stubFor, urlEqualTo}
 import play.api.Configuration
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -50,6 +50,7 @@ class IndexControllerSpec extends SpecBase with WireMockSupport {
       val exampleResponse = "[{\"id\":1,\"name\":\"Exploding Kittens\",\"category\":{\"id\":545,\"name\":\"Card Games\"},\"photoUrls\":[\"string\"],\"tags\":[{\"id\":1,\"name\":\"Most Popular\"}],\"status\":\"available\"}]"
       stubFor(
         WireMock.get(urlEqualTo("/hip-api-example-client/make-example-request"))
+          .withHeader(AUTHORIZATION, equalTo("test-auth-token"))
           .willReturn(
             aResponse()
               .withBody(exampleResponse)
@@ -64,7 +65,6 @@ class IndexControllerSpec extends SpecBase with WireMockSupport {
       }
     }
   }
-
 
   "must call back end and redirect with error status code" in {
 
@@ -89,11 +89,10 @@ class IndexControllerSpec extends SpecBase with WireMockSupport {
   private def buildApplication() = {
     val servicesConfig = Configuration.from(Map(
       "microservice.services.hip-api-example-client.host" -> this.wireMockHost,
-      "microservice.services.hip-api-example-client.port" -> this.wireMockPort
+      "microservice.services.hip-api-example-client.port" -> this.wireMockPort,
+      "internal-auth.token" -> "test-auth-token"
     ))
     applicationBuilder.configure(servicesConfig).build()
   }
 
-
 }
-
