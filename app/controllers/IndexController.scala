@@ -17,6 +17,7 @@
 package controllers
 
 
+import config.FrontendAppConfig
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -34,7 +35,8 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  view: IndexView,
                                  httpClient: HttpClientV2,
-                                 servicesConfig: ServicesConfig
+                                 servicesConfig: ServicesConfig,
+                                 frontendAppConfig: FrontendAppConfig
                                ) (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action.async { implicit request =>
@@ -45,6 +47,7 @@ class IndexController @Inject()(
       implicit request => {
         httpClient
           .get(url"${servicesConfig.baseUrl("hip-api-example-client")}/hip-api-example-client/make-example-request")
+          .setHeader((AUTHORIZATION, frontendAppConfig.appAuthToken))
           .execute[HttpResponse]
           .map(response => {
             if (is2xx(response.status)) {

@@ -69,7 +69,7 @@
     headerBlock = Some(hmrcStandardHeader(
         serviceUrl  = Some(routes.IndexController.onPageLoad.url),
         signOutUrl  = None,
-        phaseBanner = Some(alphaBanner(appConfig.feedbackUrl))
+        phaseBanner = None
     )),
     beforeContentBlock = Some(beforeContent),
     footerBlock        = Some(hmrcStandardFooter()),

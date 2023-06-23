@@ -1,4 +1,4 @@
-service.name = hip-api-example-client-frontend
+service.name = HIP API Example Client
 
 site.back = Back
 site.remove = Remove
@@ -35,8 +35,8 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
-index.title = hip-api-example-client-frontend
-index.heading = hip-api-example-client-frontend
+index.title = HIP API Example Client
+index.heading = HIP API Example Client
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 checkYourAnswers.title = Check Your Answers
