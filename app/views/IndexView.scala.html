@@ -28,10 +28,10 @@
 ) {
 
     <h1 class="govuk-heading-xl">@messages("index.heading")</h1>
-    <p class="govuk-body">@routes.IndexController.onSubmit.url</p>
+    <p class="govuk-body">@routes.IndexController.onSubmit().url</p>
     @govukButton(Button(
         content = Text("Call HIP API"),
-        href = Some(routes.IndexController.onSubmit.url)
+        href = Some(routes.IndexController.onSubmit().url)
     ))
 
     <p class="govuk-body">@messages("index.guidance")</p>

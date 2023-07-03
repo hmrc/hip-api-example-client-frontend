@@ -58,7 +58,7 @@ class IndexControllerSpec extends SpecBase with WireMockSupport {
       )
 
       running(application) {
-        val request = FakeRequest(GET, routes.IndexController.onSubmit.url)
+        val request = FakeRequest(GET, routes.IndexController.onSubmit().url)
         val result = route(application, request).value
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.ResponseController.onPageLoad(exampleResponse).url
@@ -79,7 +79,7 @@ class IndexControllerSpec extends SpecBase with WireMockSupport {
     )
 
     running(application) {
-      val request = FakeRequest(GET, routes.IndexController.onSubmit.url)
+      val request = FakeRequest(GET, routes.IndexController.onSubmit().url)
       val result = route(application, request).value
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual routes.ResponseController.onPageLoad("Response status was 500").url
