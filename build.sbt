@@ -7,10 +7,10 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName: String = "hip-api-example-client-frontend"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "3.3.3"
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(inConfig(Test)(testSettings): _*)
   .settings(ThisBuild / useSuperShell := false)
@@ -59,6 +59,7 @@ lazy val root = (project in file("."))
     Assets / pipelineStages := Seq(concat),
     scalacOptions ++= Seq("-deprecation", "-feature")
   )
+  .settings(scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")))
 
 lazy val it = (project in file("it"))
   .enablePlugins(PlayScala)
