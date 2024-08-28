@@ -19,13 +19,14 @@ package controllers
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, stubFor, urlEqualTo}
+import org.scalatest.freespec.AnyFreeSpecLike
 import play.api.Configuration
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.http.test.WireMockSupport
 import views.html.IndexView
 
-class IndexControllerSpec extends SpecBase with WireMockSupport {
+class IndexControllerSpec extends AnyFreeSpecLike with SpecBase with WireMockSupport {
 
   "Index Controller" - {
 
@@ -40,7 +41,7 @@ class IndexControllerSpec extends SpecBase with WireMockSupport {
         val view = application.injector.instanceOf[IndexView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString()
+        contentAsString(result) mustEqual view()(request, messages(application, request)).toString()
       }
     }
 

@@ -17,31 +17,28 @@
 package controllers
 
 import base.SpecBase
+import org.scalatest.funsuite.AnyFunSuite
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.http.test.WireMockSupport
 import views.html.ApiResponseView
 
-class ResponseControllerSpec extends SpecBase with WireMockSupport {
+class ResponseControllerSpec extends AnyFunSuite with SpecBase with WireMockSupport {
 
-  "Response Controller" - {
+  test("Response Controller must return OK and the correct view for a GET") {
+    val application = applicationBuilder.build()
 
-    "must return OK and the correct view for a GET" in {
+    running(application) {
+      val message = "Cheese."
+      val request = FakeRequest(GET, routes.ResponseController.onPageLoad(message).url)
 
-      val application = applicationBuilder.build()
+      val result = route(application, request).value
+      val view = application.injector.instanceOf[ApiResponseView]
 
-      running(application) {
-        val message = "Cheese."
-        val request = FakeRequest(GET, routes.ResponseController.onPageLoad(message).url)
-
-        val result = route(application, request).value
-        val view = application.injector.instanceOf[ApiResponseView]
-
-        status(result) mustEqual OK
-        val content = contentAsString(result)
-        content mustEqual view(message)(request, messages(application)).toString()
-        content must include(message)
-      }
+      status(result) mustEqual OK
+      val content = contentAsString(result)
+      content mustEqual view(message)(request, messages(application, request)).toString()
+      content must include(message)
     }
   }
 }

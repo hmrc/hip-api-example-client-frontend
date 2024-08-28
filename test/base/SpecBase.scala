@@ -17,7 +17,6 @@
 package base
 
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{OptionValues, TryValues}
 import play.api.Application
@@ -26,17 +25,17 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 
 trait SpecBase
-  extends AnyFreeSpec
-    with Matchers
+  extends Matchers
     with TryValues
     with OptionValues
     with ScalaFutures
     with IntegrationPatience {
 
-  val userAnswersId: String = "id"
+      val userAnswersId: String = "id"
 
-  def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
+      def messages(app: Application, request: FakeRequest[?]): Messages =
+        app.injector.instanceOf[MessagesApi].preferred(request)
 
-  protected def applicationBuilder: GuiceApplicationBuilder =
-    new GuiceApplicationBuilder()
+      protected def applicationBuilder: GuiceApplicationBuilder =
+        new GuiceApplicationBuilder()
 }
