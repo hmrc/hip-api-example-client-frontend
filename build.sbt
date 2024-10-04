@@ -7,7 +7,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName: String = "hip-api-example-client-frontend"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "3.3.3"
+ThisBuild / scalaVersion := "3.5.0"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
@@ -40,7 +40,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageHighlighting := true,
         scalacOptions ++= Seq(
       "-feature",
-      "-Wconf:cat=deprecation:ws,cat=feature:ws,cat=optimizer:ws,src=target/.*:s"
+      "-Wconf:msg=deprecation:w,msg=feature:w,msg=optimizer:w,src=target/.*:s"
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
@@ -58,12 +58,14 @@ lazy val root = (project in file("."))
     scalacOptions ++= Seq("-deprecation", "-feature")
   )
   .settings(scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")))
+  .settings(scalacOptions += "-Wconf:msg=Flag.*repeatedly:s")
 
 lazy val it = (project in file("it"))
   .enablePlugins(PlayScala)
   .dependsOn(root % "test->test")
   .settings(DefaultBuildSettings.itSettings())
   .settings(libraryDependencies ++= AppDependencies.it)
+  .settings(scalacOptions += "-Wconf:msg=Flag.*repeatedly:s")
 
 lazy val testSettings: Seq[Def.Setting[?]] = Seq(
   fork := true
